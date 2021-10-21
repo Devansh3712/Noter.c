@@ -1,0 +1,1 @@
+gcc -o noter main.c noter.c & noter.exe
