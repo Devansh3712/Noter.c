@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <sys/stat.h>
+#include <windows.h>
 
 #define BODY 4096
 #define TITLE 255
@@ -23,7 +25,18 @@ struct Note{
     char timestamp[TIME];
 };
 
+void checkDirectory(){
+    char path[] = "./Notes/";
+    struct stat st = {0};
+
+    if (stat(path, &st) == -1) {
+        CreateDirectory (path, NULL);
+    }
+}
+
 void createNote(char title[TITLE], char content[BODY]){
+    checkDirectory();
+
     struct Note note;
     char path[] = "./Notes/";
     title[strlen(title) - 1] = '\0';
@@ -58,6 +71,8 @@ void createNote(char title[TITLE], char content[BODY]){
 }
 
 void readNote(char title[TITLE]){
+    checkDirectory();
+
     char path[] = "./Notes/";
     title[strlen(title) - 1] = '\0';
 
@@ -89,6 +104,8 @@ void readNote(char title[TITLE]){
 }
 
 void updateNote(char title[TITLE], char newContent[BODY]){
+    checkDirectory();
+
     char path[] = "./Notes/", updatePath[255];
     title[strlen(title) - 1] = '\0';
 
@@ -138,6 +155,8 @@ void updateNote(char title[TITLE], char newContent[BODY]){
 }
 
 void deleteNote(char title[TITLE]){
+    checkDirectory();
+
     char path[] = "./Notes/";
     title[strlen(title) - 1] = '\0';
 
