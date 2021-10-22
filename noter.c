@@ -25,6 +25,7 @@ struct Note{
 
 void createNote(char title[TITLE], char content[BODY]){
     struct Note note;
+    char path[] = "./Notes/";
     title[strlen(title) - 1] = '\0';
 
     time_t t = time(NULL);
@@ -37,9 +38,10 @@ void createNote(char title[TITLE], char content[BODY]){
     strcpy(note.timestamp, currentTime);
 
     strcat(title, ".dat");
+    strcat(path, title);
 
     FILE *outfile;
-    outfile = fopen(title, "wb");
+    outfile = fopen(path, "wb");
     if(outfile == NULL){
 	    printf("\n[-] Unable to open the file\n");
         return;
@@ -56,12 +58,15 @@ void createNote(char title[TITLE], char content[BODY]){
 }
 
 void readNote(char title[TITLE]){
+    char path[] = "./Notes/";
     title[strlen(title) - 1] = '\0';
+
     strcat(title, ".dat");
+    strcat(path, title);
 
     FILE *infile;
     struct Note note;
-    infile = fopen(title, "rb");
+    infile = fopen(path, "rb");
     if(infile == NULL){
         printf("\n[-] Unable to open the file\n");
         return;
@@ -84,18 +89,23 @@ void readNote(char title[TITLE]){
 }
 
 void updateNote(char title[TITLE], char newContent[BODY]){
+    char path[] = "./Notes/", updatePath[255];
     title[strlen(title) - 1] = '\0';
+
     strcat(title, ".dat");
+    strcat(path, title);
+    strcpy(updatePath, path);
 
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
     char currentTime[TIME];
     assert(strftime(currentTime, sizeof(currentTime), "%c", tm));
 
-    FILE *infile;
     struct Note note;
     struct Note newNote;
-    infile = fopen(title, "rb");
+
+    FILE *infile;
+    infile = fopen(path, "rb");
     if(infile == NULL){
         printf("\n[-] Unable to open the file\n");
         return;
@@ -111,7 +121,7 @@ void updateNote(char title[TITLE], char newContent[BODY]){
     fclose(infile);
 
     FILE *outfile;
-    outfile = fopen(title, "wb");
+    outfile = fopen(updatePath, "wb");
     if(outfile == NULL){
 	    printf("\n[-] Unable to open the file\n");
         return;
@@ -128,10 +138,13 @@ void updateNote(char title[TITLE], char newContent[BODY]){
 }
 
 void deleteNote(char title[TITLE]){
+    char path[] = "./Notes/";
     title[strlen(title) - 1] = '\0';
-    strcat(title, ".dat");
 
-    if(remove(title) == 0){
+    strcat(title, ".dat");
+    strcat(path, title);
+
+    if(remove(path) == 0){
         printf("\n[+] Note deleted successfully\n");
         return;
     }else{
