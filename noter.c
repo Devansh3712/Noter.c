@@ -30,7 +30,11 @@ void checkDirectory(){
     struct stat st = {0};
 
     if (stat(path, &st) == -1) {
-        CreateDirectory (path, NULL);
+        #if defined(_WIN32)
+            CreateDirectory (path, NULL);
+        #else 
+            mkdir(path, 0700); 
+        #endif
     }
 }
 
