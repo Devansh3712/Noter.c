@@ -13,7 +13,10 @@
 #include <string.h>
 #include <time.h>
 #include <sys/stat.h>
+
+#if defined(_WIN32)
 #include <windows.h>
+#endif
 
 #define BODY 4096
 #define TITLE 255
