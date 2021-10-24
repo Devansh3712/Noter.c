@@ -21,6 +21,7 @@
 #define BODY 4096
 #define TITLE 255
 #define TIME 64
+#define PATH "./notes/"
 
 struct Note{
     char title[TITLE];
@@ -29,12 +30,11 @@ struct Note{
 };
 
 void checkDirectory(){
-    char path[] = "./Notes/";
     struct stat st = {0};
 
-    if (stat(path, &st) == -1) {
+    if (stat(PATH, &st) == -1){
         #if defined(_WIN32)
-            CreateDirectory (path, NULL);
+            CreateDirectory(PATH, NULL);
         #else 
             mkdir(path, 0700); 
         #endif
@@ -45,7 +45,6 @@ void createNote(char title[TITLE], char content[BODY]){
     checkDirectory();
 
     struct Note note;
-    char path[] = "./Notes/";
     title[strlen(title) - 1] = '\0';
 
     time_t t = time(NULL);
@@ -58,10 +57,10 @@ void createNote(char title[TITLE], char content[BODY]){
     strcpy(note.timestamp, currentTime);
 
     strcat(title, ".dat");
-    strcat(path, title);
+    strcat(PATH, title);
 
     FILE *outfile;
-    outfile = fopen(path, "wb");
+    outfile = fopen(PATH, "wb");
     if(outfile == NULL){
 	    printf("\n[-] Unable to open the file\n");
         return;
@@ -79,16 +78,14 @@ void createNote(char title[TITLE], char content[BODY]){
 
 void readNote(char title[TITLE]){
     checkDirectory();
-
-    char path[] = "./Notes/";
     title[strlen(title) - 1] = '\0';
 
     strcat(title, ".dat");
-    strcat(path, title);
+    strcat(PATH, title);
 
     FILE *infile;
     struct Note note;
-    infile = fopen(path, "rb");
+    infile = fopen(PATH, "rb");
     if(infile == NULL){
         printf("\n[-] Unable to open the file\n");
         return;
@@ -113,12 +110,12 @@ void readNote(char title[TITLE]){
 void updateNote(char title[TITLE], char newContent[BODY]){
     checkDirectory();
 
-    char path[] = "./Notes/", updatePath[255];
+    char updatePath[255];
     title[strlen(title) - 1] = '\0';
 
     strcat(title, ".dat");
-    strcat(path, title);
-    strcpy(updatePath, path);
+    strcat(PATH, title);
+    strcpy(updatePath, PATH);
 
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
@@ -129,7 +126,7 @@ void updateNote(char title[TITLE], char newContent[BODY]){
     struct Note newNote;
 
     FILE *infile;
-    infile = fopen(path, "rb");
+    infile = fopen(PATH, "rb");
     if(infile == NULL){
         printf("\n[-] Unable to open the file\n");
         return;
@@ -163,14 +160,12 @@ void updateNote(char title[TITLE], char newContent[BODY]){
 
 void deleteNote(char title[TITLE]){
     checkDirectory();
-
-    char path[] = "./Notes/";
     title[strlen(title) - 1] = '\0';
 
     strcat(title, ".dat");
-    strcat(path, title);
+    strcat(PATH, title);
 
-    if(remove(path) == 0){
+    if(remove(PATH) == 0){
         printf("\n[+] Note deleted successfully\n");
         return;
     }else{

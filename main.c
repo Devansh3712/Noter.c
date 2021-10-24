@@ -13,6 +13,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "noter.h"
+#include "user.h"
 
 #define BODY 4096
 #define TITLE 255
