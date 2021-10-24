@@ -36,7 +36,7 @@ void checkDirectory(){
         #if defined(_WIN32)
             CreateDirectory(PATH, NULL);
         #else 
-            mkdir(path, 0700); 
+            mkdir(PATH, 0700); 
         #endif
     }
 }
