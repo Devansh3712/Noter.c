@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 #include "../packages/noter.h"
+#include "../packages/user.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -11,11 +12,13 @@
 void test(){
     clock_t begin = clock();
     int fail = 0, result[4];
-    result[0] = createNote("test", "test");
-    result[1] = readNote("test");
+    createUser("test", "test@123");
+    result[0] = createNote("test", "testNote", "testContent");
+    result[1] = readNote("test", "testNote");
     printf("\e[1;1H\e[2J");
-    result[2] = updateNote("test", "test2");
-    result[3] = deleteNote("test");
+    result[2] = updateNote("test", "testNote", "newTestContent");
+    result[3] = deleteNote("test", "testNote");
+    deleteUser("test");
     for(int test = 0; test < 4; test++){
         if(result[test]){
             printf(".");
