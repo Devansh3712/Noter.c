@@ -31,9 +31,9 @@ void checkNotesDirectory(){
 
     if (stat(path, &st) == -1){
         #if defined(_WIN32)
-            CreateDirectory(path, NULL);
+        CreateDirectory(path, NULL);
         #else 
-            mkdir(path, 0700); 
+        mkdir(path, 0700); 
         #endif
     }
 }
@@ -47,9 +47,9 @@ void createUserDirectory(char username[LIMIT]){
 
     if (stat(path, &st) == -1){
         #if defined(_WIN32)
-            CreateDirectory(path, NULL);
+        CreateDirectory(path, NULL);
         #else 
-            mkdir(path, 0700);
+        mkdir(path, 0700);
         #endif
     }
 }
@@ -151,22 +151,15 @@ bool updateUserPassword(char username[LIMIT], char newPassword[LIMIT]){
 }
 
 bool deleteUser(char username[LIMIT]){
-    #if defined(_WIN32)
-        char path[] = "\"./notes/";
-        char command[] = "rmdir ";
-        strcat(path, username);
-        strcat(command, path);
-        strcat(command, "\" /S /Q");
-
-        system(command);
-        return true;
+    #ifdef _WIN32
+    char command[100];
+    sprintf(command, "rmdir \"./notes/%s\" /S /Q", username);
+    system(command);
+    return true;
     #else 
-        char path[] = "./notes/";
-        char command[] = "rm -rf ";
-        strcat(path, username);
-        strcat(command, path);
-
-        system(command);
-        return true;
+    char command[100];
+    sprintf(command, "rm -rf ./notes/%s", username);
+    system(command);
+    return true;
     #endif
 }

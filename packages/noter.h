@@ -9,9 +9,11 @@
  */
 
 #include <stdio.h>
+#include <stdbool.h>
 
 #define BODY 4096
 #define TITLE 255
+#define USER 100
 
 #define ART "\n888b    888          888                              \n"\
 "8888b   888          888                              \n"\
@@ -22,7 +24,7 @@
 "888   Y8888 Y88..88P Y88b. Y8b.     888  d8b Y88b.    \n"\
 "888    Y888  \"Y88P\"   \"Y888 \"Y8888  888  Y8P  \"Y8888P \n\n"
 
-#define MENU "OPTIONS\n"\
+#define MENU_OPTIONS "OPTIONS\n"\
 "-------\n\n"\
 "1. Create a note\n"\
 "2. Read a note\n"\
@@ -30,7 +32,10 @@
 "4. Delete a note\n"\
 "5. Quit\n\n"
 
-void createNote(char title[TITLE], char content[BODY]);
-void readNote(char title[TITLE]);
-void updateNote(char title[TITLE], char newContent[BODY]);
-void deleteNote(char title[TITLE]);
+#define USER_OPTIONS "1. Login\n"\
+"2. Register\n\n"
+
+bool createNote(char username[USER], char title[TITLE], char content[BODY]);
+bool readNote(char username[USER], char title[TITLE]);
+bool updateNote(char username[USER], char title[TITLE], char newContent[BODY]);
+bool deleteNote(char username[USER], char title[TITLE]);

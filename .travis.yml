@@ -1,0 +1,7 @@
+language: c
+compiler:
+  - gcc
+script:
+  - make test
+  - ./test_noter
+  - ./test_user

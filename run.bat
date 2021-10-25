@@ -1,1 +1,1 @@
-gcc -o noter main.c noter.c & noter.exe
+gcc -o noter main.c packages/noter.c packages/user.c & noter.exe

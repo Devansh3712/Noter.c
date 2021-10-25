@@ -11,6 +11,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 #include <time.h>
 #include <sys/stat.h>
 
@@ -21,6 +22,7 @@
 #define BODY 4096
 #define TITLE 255
 #define TIME 64
+#define USER 100
 #define PATH "./notes/"
 
 struct Note{
@@ -34,18 +36,18 @@ void checkDirectory(){
 
     if (stat(PATH, &st) == -1){
         #if defined(_WIN32)
-            CreateDirectory(PATH, NULL);
+        CreateDirectory(PATH, NULL);
         #else 
-            mkdir(PATH, 0700); 
+        mkdir(PATH, 0700); 
         #endif
     }
 }
 
-void createNote(char title[TITLE], char content[BODY]){
+bool createNote(char username[USER], char title[TITLE], char content[BODY]){
     checkDirectory();
-
     struct Note note;
-    title[strlen(title) - 1] = '\0';
+    char path[300];
+    sprintf(path, "./notes/%s/%s.dat", username, title);
 
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
@@ -56,44 +58,34 @@ void createNote(char title[TITLE], char content[BODY]){
     strcpy(note.body, content);
     strcpy(note.timestamp, currentTime);
 
-    strcat(title, ".dat");
-    strcat(PATH, title);
-
     FILE *outfile;
-    outfile = fopen(PATH, "wb");
+    outfile = fopen(path, "wb");
     if(outfile == NULL){
-	    printf("\n[-] Unable to open the file\n");
-        return;
+        return false;
     }
     fwrite(&note, sizeof(struct Note), 1, outfile);
     if(fwrite == 0){
-	    printf("\n[-] Unable to write to the file\n");
-        return;
+        return false;
     }
     fclose(outfile);
-    printf("\n[+] Note created successfully\n");
 
-    return;
+    return true;
 }
 
-void readNote(char title[TITLE]){
+bool readNote(char username[USER], char title[TITLE]){
     checkDirectory();
-    title[strlen(title) - 1] = '\0';
-
-    strcat(title, ".dat");
-    strcat(PATH, title);
+    struct Note note;
+    char path[300];
+    sprintf(path, "./notes/%s/%s.dat", username, title);
 
     FILE *infile;
-    struct Note note;
-    infile = fopen(PATH, "rb");
+    infile = fopen(path, "rb");
     if(infile == NULL){
-        printf("\n[-] Unable to open the file\n");
-        return;
+        return false;
     }
     fread(&note, sizeof(struct Note), 1, infile);
     if(fread == 0){
-	    printf("\n[-] Unable to read from the file\n");
-        return;
+        return false;
     }
 
     printf("\nCONTENT\n");
@@ -104,37 +96,28 @@ void readNote(char title[TITLE]){
     printf("%s\n\n", note.timestamp);
     fclose(infile);
 
-    return;
+    return true;
 }
 
-void updateNote(char title[TITLE], char newContent[BODY]){
+bool updateNote(char username[USER], char title[TITLE], char newContent[BODY]){
     checkDirectory();
-
-    char updatePath[255];
-    title[strlen(title) - 1] = '\0';
-
-    strcat(title, ".dat");
-    strcat(PATH, title);
-    strcpy(updatePath, PATH);
+    char path[300];
+    struct Note note, newNote;
+    sprintf(path, "./notes/%s/%s.dat", username, title);
 
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
     char currentTime[TIME];
     assert(strftime(currentTime, sizeof(currentTime), "%c", tm));
 
-    struct Note note;
-    struct Note newNote;
-
     FILE *infile;
-    infile = fopen(PATH, "rb");
+    infile = fopen(path, "rb");
     if(infile == NULL){
-        printf("\n[-] Unable to open the file\n");
-        return;
+        return false;
     }
     fread(&note, sizeof(struct Note), 1, infile);
     if(fread == 0){
-	    printf("\n[-] Unable to read from the file\n");
-        return;
+        return false;
     }
     strcpy(newNote.title, note.title);
     strcpy(newNote.body , newContent);
@@ -142,34 +125,27 @@ void updateNote(char title[TITLE], char newContent[BODY]){
     fclose(infile);
 
     FILE *outfile;
-    outfile = fopen(updatePath, "wb");
+    outfile = fopen(path, "wb");
     if(outfile == NULL){
-	    printf("\n[-] Unable to open the file\n");
-        return;
+        return false;
     }
     fwrite(&newNote, sizeof(struct Note), 1, outfile);
     if(fwrite == 0){
-	    printf("\n[-] Unable to write to the file\n");
-        return;
+        return false;
     }
     fclose(outfile);
-    printf("\n[+] Note updated successfully\n");
 
-    return;
+    return true;
 }
 
-void deleteNote(char title[TITLE]){
+bool deleteNote(char username[USER], char title[TITLE]){
     checkDirectory();
-    title[strlen(title) - 1] = '\0';
+    char path[300];
+    sprintf(path, "./notes/%s/%s.dat", username, title);
 
-    strcat(title, ".dat");
-    strcat(PATH, title);
-
-    if(remove(PATH) == 0){
-        printf("\n[+] Note deleted successfully\n");
-        return;
+    if(remove(path) == 0){
+        return true;
     }else{
-        printf("\n[-] nable to delete note\n");
-        return;
+        return false;
     }
 }
