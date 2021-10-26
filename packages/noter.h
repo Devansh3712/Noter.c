@@ -1,9 +1,10 @@
 /*
  * =================================================
  *
- *       Filename   noter.h
- *       Authors    Devansh Singh <nbtg14124@mail.jiit.ac.in>
- *                  Chirag Tyagi <nbtg14814@mail.jiit.ac.in>
+ *      Filename        noter.h
+ *      Authors         Devansh Singh <nbtg14124@mail.jiit.ac.in>
+ *                      Chirag Tyagi <nbtg14814@mail.jiit.ac.in>
+ *      Description     Header file for functions of noter.c library
  *
  * =================================================
  */
@@ -30,10 +31,14 @@
 "2. Read a note\n"\
 "3. Update a note\n"\
 "4. Delete a note\n"\
-"5. Quit\n\n"
+"5. Change password\n"\
+"6. Delete account\n"\
+"7. Help\n"\
+"8. Quit\n\n"
 
 #define USER_OPTIONS "1. Login\n"\
-"2. Register\n\n"
+"2. Register\n"\
+"3. Exit\n\n"
 
 bool createNote(char username[USER], char title[TITLE], char content[BODY]);
 bool readNote(char username[USER], char title[TITLE]);

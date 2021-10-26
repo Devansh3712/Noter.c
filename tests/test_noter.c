@@ -1,3 +1,14 @@
+/*
+ * =================================================
+ *
+ *      Filename        test_noter.c
+ *      Authors         Devansh Singh <nbtg14124@mail.jiit.ac.in>
+ *                      Chirag Tyagi <nbtg14814@mail.jiit.ac.in>
+ *      Description     Unittest packages/noter.h header file
+ *
+ * =================================================
+ */
+
 #include <stdio.h>
 #include <time.h>
 #include "../packages/noter.h"

@@ -1,9 +1,11 @@
 /*
  * =================================================
  *
- *       Filename   user.c
- *       Authors    Devansh Singh <nbtg14124@mail.jiit.ac.in>
- *                  Chirag Tyagi <nbtg14814@mail.jiit.ac.in>
+ *      Filename        main.c
+ *      Authors         Devansh Singh <nbtg14124@mail.jiit.ac.in>
+ *                      Chirag Tyagi <nbtg14814@mail.jiit.ac.in>
+ *      Description     Library for CRUD (Create, Read, Update, Delete)
+ *                      functions of users
  *
  * =================================================
  */
@@ -67,12 +69,10 @@ bool createUser(char username[LIMIT], char password[LIMIT]){
     strcat(path, "/user.dat");
     outfile = fopen(path, "wb");
     if(outfile == NULL){
-        printf("\n[-] Unable to create user\n");
         return false;
     }
     fwrite(&user, sizeof(struct User), 1, outfile);
     if(fwrite == 0){
-        printf("\n[-] Unable to create user\n");
         return false;
     }
     fclose(outfile);
@@ -89,24 +89,20 @@ bool authUser(char username[LIMIT], char password[LIMIT]){
     struct User user;
 
     if (stat(path, &st) == -1){
-        printf("\n[-] User not found\n");
         return false;
     }
 
     FILE *infile;
     infile = fopen(path, "rb");
     if(infile == NULL){
-        printf("\n[-] User not found\n");
         return false;
     }
     fread(&user, sizeof(struct User), 1, infile);
     if(fread == 0){
-        printf("\n[-] Unable to authenticate user\n");
         return false;
     }
     int value = strcmp(user.password, password);
     if(value != 0){
-        printf("\n[-] Wrong password\n");
         return false;
     }
     fclose(infile);

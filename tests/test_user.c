@@ -1,3 +1,14 @@
+/*
+ * =================================================
+ *
+ *      Filename        test_user.c
+ *      Authors         Devansh Singh <nbtg14124@mail.jiit.ac.in>
+ *                      Chirag Tyagi <nbtg14814@mail.jiit.ac.in>
+ *      Description     Unittest packages/user.h header file
+ *
+ * =================================================
+ */
+
 #include <stdio.h>
 #include <time.h>
 #include "../packages/user.h"

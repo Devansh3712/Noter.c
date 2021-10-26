@@ -1,9 +1,10 @@
 /*
  * =================================================
  *
- *       Filename   main.c
- *       Authors    Devansh Singh <nbtg14124@mail.jiit.ac.in>
- *                  Chirag Tyagi <nbtg14814@mail.jiit.ac.in>
+ *      Filename        main.c
+ *      Authors         Devansh Singh <nbtg14124@mail.jiit.ac.innoter>
+ *                      Chirag Tyagi <nbtg14814@mail.jiit.ac.innoter>
+ *      Description     Main Noter.c program file
  *
  * =================================================
  */
@@ -25,13 +26,13 @@ int main(){
     bool flag = false, res;
     printf("%s", ART);
     printf("%s", USER_OPTIONS);
-    printf("> Enter option: ");
+    printf("noter> Enter option: ");
     scanf("%d", &option);
     switch(option){
         case 1:
-            printf("\n> Enter username: ");
+            printf("\nnoter> Enter username: ");
             scanf("%s", &username);
-            printf("> Enter password: ");
+            printf("noter> Enter password: ");
             scanf("%s", &password);
             res = authUser(username, password);
             if(res == true){
@@ -44,9 +45,9 @@ int main(){
             break;
 
         case 2:
-            printf("\n> Enter username: ");
+            printf("\nnoter> Enter username: ");
             scanf("%s", &username);
-            printf("> Enter password: ");
+            printf("noter> Enter password: ");
             scanf("%s", &password);
             res = createUser(username, password);
             if(res == true){
@@ -57,6 +58,10 @@ int main(){
                 printf("\n[-] Unable to create user '%s'\n\n", username);
             }
             break;
+        
+        case 3:
+            printf("\n[*] Terminating program\n\n");
+            exit(0);
 
         default:
             printf("\n[-] Choose a correct option\n");
@@ -66,17 +71,17 @@ int main(){
     if(flag == true){
         printf("%s", MENU_OPTIONS);
         while(true){
-            char title[TITLE], content[BODY];
+            char title[TITLE], content[BODY], newPassword[LIMIT], opt;
 
-            printf("\n> Enter option: ");
+            printf("\nnoter> Enter option: ");
             scanf("%d", &option);
             getchar();
 
             switch(option){
                 case 1:
-                    printf("\n> Enter title of note: ");
+                    printf("\nnoter> Enter title of note: ");
                     fgets(title, sizeof(title), stdin);
-                    printf("> Enter content of note: ");
+                    printf("noter> Enter content of note: ");
                     fgets(content, sizeof(content), stdin);
                     title[strlen(title) - 1] = '\0';
                     res = createNote(username, title, content);
@@ -88,7 +93,7 @@ int main(){
                     break;
                 
                 case 2:
-                    printf("\n> Enter title of note: ");
+                    printf("\nnoter> Enter title of note: ");
                     fgets(title, sizeof(title), stdin);
                     title[strlen(title) - 1] = '\0';
                     res = readNote(username, title);
@@ -98,9 +103,9 @@ int main(){
                     break;
 
                 case 3:
-                    printf("\n> Enter title of note: ");
+                    printf("\nnoter> Enter title of note: ");
                     fgets(title, sizeof(title), stdin);
-                    printf("> Enter new content of note: ");
+                    printf("noter> Enter new content of note: ");
                     fgets(content, sizeof(content), stdin);
                     title[strlen(title) - 1] = '\0';
                     res = updateNote(username, title, content);
@@ -112,7 +117,7 @@ int main(){
                     break;
                 
                 case 4:
-                    printf("\n> Enter title of note: ");
+                    printf("\nnoter> Enter title of note: ");
                     fgets(title, sizeof(title), stdin);
                     title[strlen(title) - 1] = '\0';
                     res = deleteNote(username, title);
@@ -124,7 +129,40 @@ int main(){
                     break;
 
                 case 5:
-                    printf("\n[*] Terminating program\n");
+                    printf("\nnoter> Enter new password: ");
+                    scanf("%s", &newPassword);
+                    res = updateUserPassword(username, newPassword);
+                    if(res == true){
+                        printf("\n[+] Password updated successfully\n");
+                    }else{
+                        printf("\n[-] Unable to update password\n");
+                    }
+                    break;
+                
+                case 6:
+                    printf("\n[*] All your data will be deleted, do you want to continue? (y/n): ");
+                    scanf("%c", &opt);
+                    if(opt == 'y' || opt == 'Y'){
+                        res = deleteUser(username);
+                        if(res == true){
+                            printf("\n[+] User deleted succesfully, program terminating\n\n");
+                            exit(0);
+                        }else{
+                            printf("\n[-] Unable to delete account\n");
+                        }
+                    }else if(opt == 'n' || opt == 'N'){
+                        printf("\n[*] Account deletion aborted\n");
+                    }else{
+                        printf("\n[-] Choose a correct option\n");
+                    }
+                    break;
+                
+                case 7:
+                    printf("\n%s", MENU_OPTIONS);
+                    break;
+
+                case 8:
+                    printf("\n[*] Terminating program\n\n");
                     exit(0);
                 
                 default:

@@ -1,9 +1,11 @@
 /*
  * =================================================
  *
- *       Filename   noter.c
- *       Authors    Devansh Singh <nbtg14124@mail.jiit.ac.in>
- *                  Chirag Tyagi <nbtg14814@mail.jiit.ac.in>
+ *      Filename        noter.c
+ *      Authors         Devansh Singh <nbtg14124@mail.jiit.ac.in>
+ *                      Chirag Tyagi <nbtg14814@mail.jiit.ac.in>
+ *      Description     Library for CRUD (Create, Read, Update, Delete)
+ *                      functions of notes
  *
  * =================================================
  */
