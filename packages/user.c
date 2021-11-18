@@ -1,5 +1,5 @@
 /*
- * =================================================
+ * ====================================================================
  *
  *      Filename        main.c
  *      Authors         Devansh Singh <nbtg14124@mail.jiit.ac.in>
@@ -7,7 +7,7 @@
  *      Description     Library for CRUD (Create, Read, Update, Delete)
  *                      functions of users
  *
- * =================================================
+ * ====================================================================
  */
 
 #include <stdio.h>
@@ -21,33 +21,51 @@
 #endif
 
 #define LIMIT 100
+#define PATH "./notes/"
 
+/*
+ * @struct User
+ * @brief This structure is for storing the login details of a user
+ * @var User::username
+ * Member 'username' stores the username of a user
+ * @var User::password
+ * Member 'password' stores the password of a user
+ */
 struct User{
     char username[LIMIT];
     char password[LIMIT];
 };
 
+/*
+ * Check if the `notes` directory exists, if it doesn't
+ * create the directory
+ */
 void checkNotesDirectory(){
-    char path[] = "./notes/";
     struct stat st = {0};
 
-    if (stat(path, &st) == -1){
+    if (stat(PATH, &st) == -1){ // path doesn't exist
         #if defined(_WIN32)
-        CreateDirectory(path, NULL);
+        CreateDirectory(PATH, NULL);
         #else 
-        mkdir(path, 0700); 
+        mkdir(PATH, 0700); 
         #endif
     }
 }
 
-void createUserDirectory(char username[LIMIT]){
+/*
+ * Check if the directory dedicated to user exists, if
+ * it doesn't create the directory
+ * 
+ * @param username  Username of user
+ */
+void createUserDirectory(char username[]){
     checkNotesDirectory();
 
-    char path[] = "./notes/";
-    strcat(path, username);
+    char path[300];
+    sprintf(path, "./notes/%s", username); // path for the user directory
     struct stat st = {0};
 
-    if (stat(path, &st) == -1){
+    if (stat(path, &st) == -1){ // path doesn't exist
         #if defined(_WIN32)
         CreateDirectory(path, NULL);
         #else 
@@ -56,17 +74,23 @@ void createUserDirectory(char username[LIMIT]){
     }
 }
 
-bool createUser(char username[LIMIT], char password[LIMIT]){
+/*
+ * Create a user
+ *
+ * @param username  Username of the user
+ * @param password  Password of the user
+ * @return bool     True if user is created else false
+ */
+bool createUser(char username[], char password[]){
     createUserDirectory(username);
     struct User user;
-    char path[] = "./notes/";
+    char path[300];
+    sprintf(path, "./notes/%s/user.dat", username); // path of file to store user data
 
     strcpy(user.username, username);
     strcpy(user.password, password);
 
     FILE *outfile;
-    strcat(path, username);
-    strcat(path, "/user.dat");
     outfile = fopen(path, "wb");
     if(outfile == NULL){
         return false;
@@ -80,15 +104,21 @@ bool createUser(char username[LIMIT], char password[LIMIT]){
     return true;
 }
 
-bool authUser(char username[LIMIT], char password[LIMIT]){
-    char path[] = "./notes/";
-    strcat(path, username);
-    strcat(path, "/user.dat");
+/*
+ * Check if the user exists and authorize user password
+ *
+ * @param username  Username of the user
+ * @param password  Password of the user
+ * @return bool     True if the user password is correct else false
+ */
+bool authUser(char username[], char password[]){
+    char path[300];
+    sprintf(path, "./notes/%s/user.dat", username);
 
     struct stat st = {0};
     struct User user;
 
-    if (stat(path, &st) == -1){
+    if (stat(path, &st) == -1){ // user doesn't exist
         return false;
     }
 
@@ -110,11 +140,16 @@ bool authUser(char username[LIMIT], char password[LIMIT]){
     return true;
 }
 
-bool updateUserPassword(char username[LIMIT], char newPassword[LIMIT]){
-    char path[] = "./notes/", updatePath[255];
-    strcat(path, username);
-    strcat(path, "/user.dat");
-    strcpy(updatePath, path);
+/*
+ * Update password of a user
+ *
+ * @param username  Username of the user
+ * @param password  Passwoed of the user
+ * @return bool     True if the password is updated else false
+ */
+bool updateUserPassword(char username[], char newPassword[]){
+    char path[300];
+    sprintf(path, "./notes/%s/user.dat", username);
 
     struct User user;
     struct User updatedUser;
@@ -133,7 +168,7 @@ bool updateUserPassword(char username[LIMIT], char newPassword[LIMIT]){
     fclose(infile);
 
     FILE *outfile;
-    outfile = fopen(updatePath, "wb");
+    outfile = fopen(path, "wb");
     if(outfile == NULL){
         return false;
     }
@@ -146,10 +181,16 @@ bool updateUserPassword(char username[LIMIT], char newPassword[LIMIT]){
     return true;
 }
 
-bool deleteUser(char username[LIMIT]){
+/*
+ * Delete a user and their data
+ *
+ * @param username  Username of the user
+ * @return bool     True if user is deleted else false
+ */
+bool deleteUser(char username[]){
     #ifdef _WIN32
     char command[100];
-    sprintf(command, "rmdir \"./notes/%s\" /S /Q", username);
+    sprintf(command, "rmdir \"./notes/%s\" /S /Q", username); // delete user's directory
     system(command);
     return true;
     #else 

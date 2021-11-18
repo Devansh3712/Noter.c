@@ -1,13 +1,13 @@
 /*
- * =================================================
+ * ====================================================================
  *
  *      Filename        noter.c
  *      Authors         Devansh Singh <nbtg14124@mail.jiit.ac.in>
  *                      Chirag Tyagi <nbtg14814@mail.jiit.ac.in>
  *      Description     Library for CRUD (Create, Read, Update, Delete)
- *                      functions of notes
+ *                      functions of notes of a user
  *
- * =================================================
+ * ====================================================================
  */
 
 #include <assert.h>
@@ -27,16 +27,30 @@
 #define USER 100
 #define PATH "./notes/"
 
+/*
+ * @struct Note
+ * @brief This structure is for storing the notes of a user
+ * @var Note::title
+ * Member 'title' stores the title of the note
+ * @var Note::body
+ * Member 'body' stores the content of the note
+ * @var Note::timestamp
+ * Member 'timestamp' stores the timestamp of the creation of a note
+ */
 struct Note{
     char title[TITLE];
     char body[BODY];
     char timestamp[TIME];
 };
 
+/*
+ * Check if the `notes` directory exists, if it doesn't
+ * create the directory
+ */
 void checkDirectory(){
     struct stat st = {0};
 
-    if (stat(PATH, &st) == -1){
+    if (stat(PATH, &st) == -1){ // path doesn't exist
         #if defined(_WIN32)
         CreateDirectory(PATH, NULL);
         #else 
@@ -45,16 +59,24 @@ void checkDirectory(){
     }
 }
 
-bool createNote(char username[USER], char title[TITLE], char content[BODY]){
+/*
+ * Create a note for a user
+ *
+ * @param username  User whose note is to be created.
+ * @param title     Title of the note.
+ * @param content   Content of the note.
+ * @return bool     True if note is created else false.
+ */
+bool createNote(char username[], char title[], char content[]){
     checkDirectory();
     struct Note note;
     char path[300];
-    sprintf(path, "./notes/%s/%s.dat", username, title);
+    sprintf(path, "./notes/%s/%s.dat", username, title); // path of note
 
     time_t t = time(NULL);
     struct tm *tm = localtime(&t);
     char currentTime[TIME];
-    assert(strftime(currentTime, sizeof(currentTime), "%c", tm));
+    assert(strftime(currentTime, sizeof(currentTime), "%c", tm)); // current timestamp
 
     strcpy(note.title, title);
     strcpy(note.body, content);
@@ -74,7 +96,14 @@ bool createNote(char username[USER], char title[TITLE], char content[BODY]){
     return true;
 }
 
-bool readNote(char username[USER], char title[TITLE]){
+/*
+ * Read a note of a user
+ *
+ * @param username  User whose note is to be created.
+ * @param title     Title of the note.
+ * @return bool     True if note is read else false.
+ */
+bool readNote(char username[], char title[]){
     checkDirectory();
     struct Note note;
     char path[300];
@@ -85,23 +114,31 @@ bool readNote(char username[USER], char title[TITLE]){
     if(infile == NULL){
         return false;
     }
-    fread(&note, sizeof(struct Note), 1, infile);
+    fread(&note, sizeof(struct Note), 1, infile); // read and store note details in struct
     if(fread == 0){
         return false;
     }
 
     printf("\nCONTENT\n");
     printf("-------\n");
-    printf("%s\n\n", note.body);
+    printf("%s\n\n", note.body); // print content of note
     printf("TIMESTAMP\n");
     printf("---------\n");
-    printf("%s\n\n", note.timestamp);
+    printf("%s\n\n", note.timestamp); // print timestamp of note
     fclose(infile);
 
     return true;
 }
 
-bool updateNote(char username[USER], char title[TITLE], char newContent[BODY]){
+/*
+ * Update a note of a user
+ *
+ * @param username      User whose note is to be created.
+ * @param title         Title of the note.
+ * @param newContent    New content of the note.
+ * @return bool         True if note is updated else false.
+ */
+bool updateNote(char username[], char title[], char newContent[]){
     checkDirectory();
     char path[300];
     struct Note note, newNote;
@@ -140,7 +177,14 @@ bool updateNote(char username[USER], char title[TITLE], char newContent[BODY]){
     return true;
 }
 
-bool deleteNote(char username[USER], char title[TITLE]){
+/*
+ * Delete a note of a user
+ *
+ * @param username  User whose note is to be created.
+ * @param title     Title of the note.
+ * @return bool     True if note is deleted else false.
+ */
+bool deleteNote(char username[], char title[]){
     checkDirectory();
     char path[300];
     sprintf(path, "./notes/%s/%s.dat", username, title);
