@@ -16,6 +16,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <sys/stat.h>
+#include "noter.h"
 
 #if defined(_WIN32)
 #include <windows.h>

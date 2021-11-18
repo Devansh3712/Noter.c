@@ -15,6 +15,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <sys/stat.h>
+#include "user.h"
 
 #if defined(_WIN32)
 #include <windows.h>

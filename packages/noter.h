@@ -4,17 +4,13 @@
  *      Filename        noter.h
  *      Authors         Devansh Singh <nbtg14124@mail.jiit.ac.in>
  *                      Chirag Tyagi <nbtg14814@mail.jiit.ac.in>
- *      Description     Header file for functions of noter.c library
+ *      Description     Header file for functions of `noter.c` library
  *
  * ====================================================================
  */
 
 #include <stdio.h>
 #include <stdbool.h>
-
-#define BODY 4096
-#define TITLE 255
-#define USER 100
 
 #define ART "\n888b    888          888                              \n"\
 "8888b   888          888                              \n"\
@@ -40,7 +36,7 @@
 "2. Register\n"\
 "3. Exit\n\n"
 
-bool createNote(char username[USER], char title[TITLE], char content[BODY]);
-bool readNote(char username[USER], char title[TITLE]);
-bool updateNote(char username[USER], char title[TITLE], char newContent[BODY]);
-bool deleteNote(char username[USER], char title[TITLE]);
+bool createNote(char username[], char title[], char content[]);
+bool readNote(char username[], char title[]);
+bool updateNote(char username[], char title[], char newContent[]);
+bool deleteNote(char username[], char title[]);
